@@ -13,12 +13,38 @@ function isPrime(n) {
 }
 
 // generate primes
-function generatePrimes(arrayLength){
+function generatePrimes(arrayLength, max){
     var primeArray = [];
     var count = 2;
 
-    while(primeArray.length<arrayLength){
+    while(primeArray.length<arrayLength && (max || true)){
         if(isPrime(count)){
+            primeArray.push(count);
+        }
+        count++;
+    }
+    return primeArray;
+}
+
+function gcd(a,b){
+    //console.log('a: ' + a + ' b: ' + b);
+    if (b == 0){
+        //console.log('out: ' + a);
+        return a;
+    }
+    else{
+        return gcd(b, a % b);
+    }
+}
+
+function generateCoprimes(input){
+    var primeArray = [];
+    var count = 2;
+
+    while(count<input){
+        var coprime = gcd(input, count);
+        //console.log(coprime);
+        if(coprime == 1){
             primeArray.push(count);
         }
         count++;
@@ -48,20 +74,15 @@ function getTotient(one, two){
 
 // generate RSA keypair
 function generateKeypair(primeLength){
-    var primes = generatePrimes(primeLength);
+    var primes = generatePrimes(primeLength); // generate primes
     var keyPrimes = [];
-    keyPrimes[0] = primes.splice(Math.floor(Math.random()*primeLength),1)[0];
-    keyPrimes[1] = primes.splice(Math.floor(Math.random()*primeLength-1),1)[0];
-    //keyPrimes[0] = 61;
-    //keyPrimes[1] = 53;
-
-    var modulus = keyPrimes[0]*keyPrimes[1];
-    var totient = getTotient(keyPrimes[0], keyPrimes[1]);
-    var newPrimes = generatePrimes(totient);
-
-    var publicNumber = newPrimes[newPrimes.length-1];
-    //var publicNumber = 17;
-    var privateNumber = xgcd(publicNumber, totient)[0].mod(totient);
+    keyPrimes[0] = primes.splice(Math.floor(Math.random()*primeLength),1)[0]; // random first prime
+    keyPrimes[1] = primes.splice(Math.floor(Math.random()*primeLength-1),1)[0]; // random second prime
+    var modulus = keyPrimes[0]*keyPrimes[1]; // calculate modulus
+    var totient = getTotient(keyPrimes[0], keyPrimes[1]); // calculate totient
+    var coPrimes = generateCoprimes(totient, totient); // find coprimes
+    var publicNumber = coPrimes[0]; // choosing the smallest coprime as public key
+    var privateNumber = xgcd(publicNumber, totient)[0].mod(totient); // generate private key
 
     return { 'public': [publicNumber, modulus], 'private': [privateNumber, modulus] };
 }
