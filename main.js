@@ -26,6 +26,7 @@ function generatePrimes(arrayLength, max){
     return primeArray;
 }
 
+// Euclid's algorithm (greates common denominator)
 function gcd(a,b){
     //console.log('a: ' + a + ' b: ' + b);
     if (b == 0){
