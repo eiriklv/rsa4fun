@@ -82,7 +82,7 @@ function generateKeypair(primeLength){
     keyPrimes[1] = primes.splice(Math.floor(Math.random()*primeLength-1),1)[0]; // random second prime
     var modulus = keyPrimes[0]*keyPrimes[1]; // calculate modulus
     var totient = getTotient(keyPrimes[0], keyPrimes[1]); // calculate totient
-    var coPrimes = generateCoprimes(totien); // find coprimes
+    var coPrimes = generateCoprimes(totient); // find coprimes
     var publicNumber = coPrimes[0]; // choosing the smallest coprime as public key
     var privateNumber = xgcd(publicNumber, totient)[0].mod(totient); // generate private key
 
@@ -91,17 +91,12 @@ function generateKeypair(primeLength){
 
 // encrypt or decrypt message
 function cryptMessage(key, message){
-    console.log(key);
-    var decryptedMessage;
-    var temp = message;
-
-    for(var i=1; i<key[0]; i++){
+    var temp = 1;
+    for(var i=0; i<key[0]; i++){
         //console.log(message);
         temp = (message*temp) % key[1];
     }
-
-    decryptedMessage = message;
-    return decryptedMessage;
+    return temp;
 }
 
 module.exports.generateKeypair = generateKeypair;
