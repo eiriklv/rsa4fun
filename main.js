@@ -13,11 +13,11 @@ function isPrime(n) {
 }
 
 // generate primes
-function generatePrimes(arrayLength, max){
+function generatePrimes(arrayLength){
     var primeArray = [];
     var count = 2;
 
-    while(primeArray.length<arrayLength && (max || true)){
+    while(primeArray.length<arrayLength){
         if(isPrime(count)){
             primeArray.push(count);
         }
@@ -38,6 +38,7 @@ function gcd(a,b){
     }
 }
 
+// Generate coprime numbers - if existing
 function generateCoprimes(input){
     var primeArray = [];
     var count = 2;
@@ -81,7 +82,7 @@ function generateKeypair(primeLength){
     keyPrimes[1] = primes.splice(Math.floor(Math.random()*primeLength-1),1)[0]; // random second prime
     var modulus = keyPrimes[0]*keyPrimes[1]; // calculate modulus
     var totient = getTotient(keyPrimes[0], keyPrimes[1]); // calculate totient
-    var coPrimes = generateCoprimes(totient, totient); // find coprimes
+    var coPrimes = generateCoprimes(totien); // find coprimes
     var publicNumber = coPrimes[0]; // choosing the smallest coprime as public key
     var privateNumber = xgcd(publicNumber, totient)[0].mod(totient); // generate private key
 
