@@ -89,13 +89,47 @@ function generateKeypair(primeLength){
     return { 'public': [publicNumber, modulus], 'private': [privateNumber, modulus] };
 }
 
-// encrypt or decrypt message
-function cryptMessage(key, message){
+// create a character array from a string
+function toCharArray(input){
+    var charArray = [];
+
+    for(var i=0; i<input.length; i++){
+        charArray[i] = input.charCodeAt(i);
+    }
+    return charArray;
+}
+
+// create a string from a character array
+function toStringArray(input){
+    var stringArray = [];
+
+    for(var i=0; i<input.length; i++){
+        stringArray[i] = String.fromCharCode(input[i]);
+    }
+    return stringArray.join('');
+}
+
+// encrypt or decrypt single character/number
+function cryptSingle(key, message){
     var temp = 1;
+
     for(var i=0; i<key[0]; i++){
         //console.log(message);
         temp = (message*temp) % key[1];
     }
+    return temp;
+}
+
+// encrypt or decrypt message (encrypt/decrypt - true/false)
+function cryptMessage(key, message, encrypt){
+    var temp = [];
+    if(encrypt) message = toCharArray(message);
+
+    for(var i=0;i<message.length; i++){
+        temp[i] = cryptSingle(key, message[i]);
+    }
+
+    if(!encrypt) return toStringArray(temp);
     return temp;
 }
 
