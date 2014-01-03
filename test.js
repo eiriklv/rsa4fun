@@ -1,13 +1,13 @@
 // Testing
 var rsaHelpers = require('./main');
 
-var keys = rsaHelpers.generateKeypair(100);
+var keys = rsaHelpers.generateKeypair(1000);
 console.log(keys);
 console.log('public key : ' + keys['public'][0]);
 console.log('private key: ' + keys['private'][0]);
 console.log('modulus    : ' + keys['private'][1]);
 
-var message = 'tullball';
+var message = 'hemmelig';
 
 console.log('Original message: ' + message);
 

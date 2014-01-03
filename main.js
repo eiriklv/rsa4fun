@@ -26,7 +26,7 @@ function generatePrimes(arrayLength){
     return primeArray;
 }
 
-// Euclid's algorithm (greates common denominator)
+// Euclid's algorithm (greatest common denominator)
 function gcd(a,b){
     //console.log('a: ' + a + ' b: ' + b);
     if (b == 0){
@@ -54,7 +54,7 @@ function generateCoprimes(input){
     return primeArray;
 }
 
-// Euclid's extended algorithm (greates common denominator)
+// Euclid's extended algorithm (greatest common denominator)
 function xgcd(a,b){
     if (b == 0){
         return [1, 0, a];
@@ -112,9 +112,8 @@ function toStringArray(input){
 // encrypt or decrypt single character/number
 function cryptSingle(key, message){
     var temp = 1;
-
+    // exponential (needs to be rewritten to use a faster algorithm)
     for(var i=0; i<key[0]; i++){
-        //console.log(message);
         temp = (message*temp) % key[1];
     }
     return temp;
