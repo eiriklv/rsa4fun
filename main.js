@@ -27,7 +27,7 @@ function generatePrimes(arrayLength){
 }
 
 // euclid's algorithm (greatest common denominator)
-function gcd(a,b){
+function gcd(a, b){
     //console.log('a: ' + a + ' b: ' + b);
     if (b == 0){
         //console.log('out: ' + a);
@@ -116,7 +116,7 @@ function cryptSingle(key, message){
 }
 
 // performs x^c mod n (x = base, c = exp, n = mod) (RSA encryption or decryption operation)
-function expmod( base, exp, mod ){
+function expmod(base, exp, mod){
   if (exp == 0) return 1;
   if (exp % 2 == 0){
     return Math.pow( expmod( base, (exp / 2), mod), 2) % mod;
