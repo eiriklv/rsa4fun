@@ -1,9 +1,9 @@
-// modulus
+// modulus (javascript % gives remainder)
 Number.prototype.mod = function(n) {
     return ((this%n)+n)%n;
 };
 
-// Returns true for prime numbers
+// returns true for prime numbers
 function isPrime(n) {
     var sqrtn = Math.sqrt(n);
 
@@ -26,7 +26,7 @@ function generatePrimes(arrayLength){
     return primeArray;
 }
 
-// Euclid's algorithm (greatest common denominator)
+// euclid's algorithm (greatest common denominator)
 function gcd(a,b){
     //console.log('a: ' + a + ' b: ' + b);
     if (b == 0){
@@ -38,7 +38,7 @@ function gcd(a,b){
     }
 }
 
-// Generate coprime numbers - if existing
+// generate coprime numbers - if existing
 function generateCoprimes(input){
     var primeArray = [];
     var count = 2;
@@ -54,7 +54,7 @@ function generateCoprimes(input){
     return primeArray;
 }
 
-// Euclid's extended algorithm (greatest common denominator)
+// euclid's extended algorithm (greatest common denominator)
 function xgcd(a,b){
     if (b == 0){
         return [1, 0, a];
@@ -69,12 +69,12 @@ function xgcd(a,b){
     }
 }
 
-// Totient helper function
+// totient helper function
 function getTotient(one, two){
     return (one-1)*(two-1);
 }
 
-// generate RSA keypair
+// generate RSA keypair (should be optimized)
 function generateKeypair(primeLength){
     var primes = generatePrimes(primeLength); // generate primes
     var keyPrimes = [];
@@ -83,7 +83,7 @@ function generateKeypair(primeLength){
     var modulus = keyPrimes[0]*keyPrimes[1]; // calculate modulus
     var totient = getTotient(keyPrimes[0], keyPrimes[1]); // calculate totient
     var coPrimes = generateCoprimes(totient); // find coprimes
-    var publicNumber = coPrimes[0]; // choosing the smallest coprime as public key
+    var publicNumber = coPrimes[0]; // choosing the smallest coprime as public key (makes encrypting faster)
     var privateNumber = xgcd(publicNumber, totient)[0].mod(totient); // generate private key
 
     return { 'public': [publicNumber, modulus], 'private': [privateNumber, modulus] };
@@ -111,12 +111,19 @@ function toStringArray(input){
 
 // encrypt or decrypt single character/number
 function cryptSingle(key, message){
-    var temp = 1;
-    // exponential (needs to be rewritten to use a faster algorithm)
-    for(var i=0; i<key[0]; i++){
-        temp = (message*temp) % key[1];
-    }
+    temp = expmod(message,key[0],key[1]); // encrypted/decrypt message/character = expmod(message, exponent, modulus)
     return temp;
+}
+
+// performs x^c mod n (x = base, c = exp, n = mod) (RSA encryption or decryption operation)
+function expmod( base, exp, mod ){
+  if (exp == 0) return 1;
+  if (exp % 2 == 0){
+    return Math.pow( expmod( base, (exp / 2), mod), 2) % mod;
+  }
+  else {
+    return (base * expmod( base, (exp - 1), mod)) % mod;
+  }
 }
 
 // encrypt or decrypt message (encrypt/decrypt - true/false)
@@ -125,12 +132,14 @@ function cryptMessage(key, message, encrypt){
     if(encrypt) message = toCharArray(message);
 
     for(var i=0;i<message.length; i++){
-        temp[i] = cryptSingle(key, message[i]);
+        temp[i] = cryptSingle(key, message[i]); // encrypt every character of the message (not really that secure)
     }
 
     if(!encrypt) return toStringArray(temp);
     return temp;
 }
 
+// exports
 module.exports.generateKeypair = generateKeypair;
 module.exports.cryptMessage = cryptMessage;
+module.exports.toCharArray = toCharArray;
