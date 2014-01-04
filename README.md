@@ -3,8 +3,7 @@ rsa4fun
 
 Public / Private key cryptography
 
-An simple implementation of the RSA algorithm
-Just for fun and learning :)
+An simple implementation of the RSA algorithm just for fun and learning :)
 
 This implementation isn't really secure at all,
 as it converts each character in the message string
