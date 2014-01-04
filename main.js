@@ -1,10 +1,10 @@
 // modulus (javascript % gives remainder)
-Number.prototype.mod = function(n) {
+Number.prototype.mod = function(n){
     return ((this%n)+n)%n;
 };
 
 // returns true for prime numbers
-function isPrime(n) {
+function isPrime(n){
     var sqrtn = Math.sqrt(n);
 
     for (var i = 2; i <= sqrtn; i++)
@@ -28,9 +28,7 @@ function generatePrimes(arrayLength){
 
 // euclid's algorithm (greatest common denominator)
 function gcd(a, b){
-    //console.log('a: ' + a + ' b: ' + b);
     if (b == 0){
-        //console.log('out: ' + a);
         return a;
     }
     else{
@@ -45,7 +43,6 @@ function generateCoprimes(input){
 
     while(count<input){
         var coprime = gcd(input, count);
-        //console.log(coprime);
         if(coprime == 1){
             primeArray.push(count);
         }
@@ -74,7 +71,39 @@ function getTotient(one, two){
     return (one-1)*(two-1);
 }
 
-// generate RSA keypair (needs optimization)
+// performs x^c mod n (x = base, c = exp, n = mod) (RSA encryption or decryption operation)
+function expmod(base, exp, mod){
+    if (exp == 0) return 1;
+    if (exp % 2 == 0){
+        return Math.pow( expmod( base, (exp / 2), mod), 2) % mod;
+    }
+    else {
+        return (base * expmod( base, (exp - 1), mod)) % mod;
+    }
+}
+
+// create a character array from a string
+function toCharArray(input){
+    var charArray = [];
+    // split string to character array
+    input.split('').forEach(function(character){
+        charArray.push(character.charCodeAt(0)); // save each char as its corresponding ASCII number
+    });
+    // return array of characters represented as its ASCII number
+    return charArray;
+}
+
+// create a string from a character array
+function toStringArray(input){
+    var stringArray = [];
+    // convert number to ASCII representation
+    input.forEach(function(asciiChar){
+        stringArray.push(String.fromCharCode(asciiChar)); // add single char to array
+    });
+    return stringArray.join(''); // combine characters to string
+}
+
+// generate RSA keypair (need optimization)
 function generateKeypair(primeLength){
     var primes = generatePrimes(primeLength); // generate primes
     var keyPrimes = [];
@@ -89,41 +118,10 @@ function generateKeypair(primeLength){
     return { 'public': [publicNumber, modulus], 'private': [privateNumber, modulus] };
 }
 
-// create a character array from a string
-function toCharArray(input){
-    var charArray = [];
-
-    for(var i=0; i<input.length; i++){
-        charArray[i] = input.charCodeAt(i);
-    }
-    return charArray;
-}
-
-// create a string from a character array
-function toStringArray(input){
-    var stringArray = [];
-
-    for(var i=0; i<input.length; i++){
-        stringArray[i] = String.fromCharCode(input[i]);
-    }
-    return stringArray.join('');
-}
-
 // encrypt or decrypt single character/number
 function cryptSingle(key, message){
     temp = expmod(message,key[0],key[1]); // encrypted/decrypt message/character = expmod(message, exponent, modulus)
     return temp;
-}
-
-// performs x^c mod n (x = base, c = exp, n = mod) (RSA encryption or decryption operation)
-function expmod(base, exp, mod){
-  if (exp == 0) return 1;
-  if (exp % 2 == 0){
-    return Math.pow( expmod( base, (exp / 2), mod), 2) % mod;
-  }
-  else {
-    return (base * expmod( base, (exp - 1), mod)) % mod;
-  }
 }
 
 // encrypt or decrypt message (encrypt/decrypt - true/false)
