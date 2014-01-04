@@ -12,4 +12,4 @@ to the corresponding character code (0-255),
 and then encrypts each character individually.
 So by encrypting with a public key, you would know
 the encrypted version of each character by encrypting
-the alphabet and creating a reverse lookup list.
+the ASCII table and creating a reverse lookup list.
