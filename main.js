@@ -74,7 +74,7 @@ function getTotient(one, two){
     return (one-1)*(two-1);
 }
 
-// generate RSA keypair (should be optimized)
+// generate RSA keypair (needs optimization)
 function generateKeypair(primeLength){
     var primes = generatePrimes(primeLength); // generate primes
     var keyPrimes = [];
@@ -85,7 +85,7 @@ function generateKeypair(primeLength){
     var coPrimes = generateCoprimes(totient); // find coprimes
     var publicNumber = coPrimes[0]; // choosing the smallest coprime as public key (makes encrypting faster)
     var privateNumber = xgcd(publicNumber, totient)[0].mod(totient); // generate private key
-
+    // return keys
     return { 'public': [publicNumber, modulus], 'private': [privateNumber, modulus] };
 }
 
